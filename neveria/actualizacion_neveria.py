@@ -1,11 +1,9 @@
-class ErrorPaleta:
+class ErrorPaleta(Exception):
     pass #para paletas que no se encuentran en venta o disponibles
 
 # Clase base para todas las paletas
 class Paleta:
     def __init__(self,sabor:str,precio:float):
-        if precio<0:
-            raise ErrorPaleta(f'Error de paleta no encontrada')
         #atributos de la clase base
         self.sabor=sabor
         self.precio=float(precio)
@@ -38,11 +36,11 @@ class PaletaCrema(Paleta):
         textura = "cremosa" if self.crema else "no cremosa"
         print(f"Paleta de Crema - Sabor: {self.sabor}, Precio: ${self.precio:.2f} ({textura})")   
 
-def buscarpaleta(sabor_busqueda):
+def buscar_paleta_por_sabor(sabor_buscado):
     for paleta in paletas:
-        if paleta.sabor==sabor_busqueda:
+        if paleta.sabor==sabor_buscado:
             return paleta
-    raise ErrorPaleta(f'Paleta {sabor_busqueda} no encontrada en inventario')
+    raise ErrorPaleta('Paleta no encontrada en inventario')
 
 #creamos la lista de paletas
 paletas = [
@@ -60,10 +58,13 @@ for paleta in paletas:
 
 sabor_a_buscar=['Fresa','Uva']
 
+print(' ')
 print(' '*4,'Busqueda de paletas')
 for sabor in sabor_a_buscar:
     try:
-        sabor_encontrada=buscarpaleta(sabor)
-        print('Paleta disponible')
+        paleta_encontrada = buscar_paleta_por_sabor(sabor)
+        print(f"ENCONTRADA: ", end="")
+        paleta_encontrada.informacion()
     except ErrorPaleta as error:
-        print(f'X {error}')
+        print(f"✗ {error}")
+    print("-" * 75)
