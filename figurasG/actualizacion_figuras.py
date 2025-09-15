@@ -2,19 +2,22 @@ from figuras import FiguraGeometrica
 import math
 import os
 os.system('cls')
+from abc import ABC, abstractmethod #importamos la libreria para  metodos 
 
 class ErrorFigura(Exception):
     pass #podemos personalizar el tipo de error
 
 #modificamos la clase FiguraGeometrica para el polimorfismo
-class FiguraGeometrica:
+class FiguraGeometrica(ABC):
     def __init__(self, nombre):
         self.nombre = nombre
 
+    @abstractmethod
     def calcularArea(self):
         #metodo que será sobrescrito por las subclases
         pass
 
+    @abstractmethod
     def perimetro(self):
         #metodo que sera escrito por las subclases
         pass
@@ -66,6 +69,8 @@ class Rectangulo(FiguraGeometrica):
 class Triangulo(FiguraGeometrica):
     def __init__(self, nombre, base, altura):
         super().__init__(nombre)
+        if base<=0 or altura<=0:
+            raise ErrorFigura('INSERTA OTRO NÚMERO QUE NO SEA 0')
         self.base = base
         self.altura = altura
 
@@ -90,10 +95,10 @@ print("-" * 45)
 
 #creamos un arreglo (lista) de objetos de diferentes figuras
 figuras = [
-    Circulo("Círculo", 0), #insertamos un circulo de r=0 para mostrar el mensaje
+    Circulo("Círculo", 1), #insertamos un circulo de r=0 para mostrar el mensaje
     #si se cambia el radio por otro numero >0 se deberia de ejecutar sin problema
     Rectangulo("Rectángulo", 8.0, 6.0),
-    Triangulo("Triángulo", 0, 7.0),
+    Triangulo("Triángulo", 1, 7.0),
     Circulo("Círculo", 3.5),
     Rectangulo("Rectángulo", 12.0, 4.0),
     Triangulo("Triángulo", 6.0, 9.0)
